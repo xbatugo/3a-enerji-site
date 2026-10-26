@@ -80,11 +80,34 @@
   });
 
   dene('form', function () {
+    // hizmete göre ölçü alanı ve ipucu (build.py IPUCU_GRUP ile eşleşir)
+    var IPUCU = {
+      alan:   ['Alan ve tavan yüksekliği', 'ör. 2.400 m², 9 m tavan', 'Radyant ısıtma için alan ölçüsü ve tavan yüksekliği iyi bir başlangıçtır.'],
+      isi:    ['Sistem / kapasite bilgisi', 'ör. buhar hattı, mevcut kazan', 'Kullanım amacı ve mevcut kazan veya hat bilgisi ön değerlendirmeyi hızlandırır.'],
+      iklim:  ['Alan ve kullanım', 'ör. 600 m² atölye, mevcut cihaz', 'Alan ölçüsü, kullanım amacı ve mevcut cihaz bilgisi yeterlidir.'],
+      boru:   ['Boru çapı, malzeme ve uzunluk', 'ör. DN50 paslanmaz, 40 m', 'Boru çapı, malzemesi ve yaklaşık uzunluğu yeterlidir.'],
+      kaynak: ['Malzeme, kalınlık ve adet', 'ör. AISI 304, 3 mm, 20 adet', 'Malzeme, kalınlık ve adet bilgisi yeterlidir; fotoğrafı WhatsApp sohbetine ekleyebilirsiniz.'],
+      makine: ['Çizim / ölçü ve adet', 'ör. çizim mevcut, 1200×800 mm, 2 adet', 'Çizim veya ölçüler ile adet bilgisi yeterlidir; çizimi WhatsApp sohbetine ekleyebilirsiniz.'],
+      genel:  ['Ölçü / miktar bilgisi', 'ör. alan, adet veya uzunluk', 'Ne yapılmasını istediğinizi birkaç cümleyle yazın.']
+    };
+    var ADLAR = { ad: 'Ad soyad', tel: 'Telefon', eposta: 'E-posta', hizmet: 'Hizmet', aciklama: 'Kısa ihtiyaç', kvkk: 'KVKK onayı' };
     $$('form.talep').forEach(function (f) {
       var kutu = f.closest('.form-kutu'), basari = $('.basari', kutu), ozet = $('pre', basari);
-      var E = f.elements;
+      var hataOzet = $('.form-hata-ozet', f), durum = $('.kopya-durum', basari);
+      var E = f.elements, metin = '';
+      var lOlcu = $('#l-olcu', f), ipucu = $('#ipucu', f);
+      function ipucuGuncelle() {
+        var o = E.hizmet.selectedOptions[0], g = IPUCU[(o && o.getAttribute('data-ipucu')) || 'genel'] || IPUCU.genel;
+        lOlcu.innerHTML = '';
+        lOlcu.appendChild(document.createTextNode(g[0] + ' '));
+        var i = document.createElement('i'); i.textContent = '(isteğe bağlı)'; lOlcu.appendChild(i);
+        E.olcu.placeholder = g[1];
+        ipucu.textContent = g[2];
+      }
       var secili = f.getAttribute('data-secili') || (new URLSearchParams(location.search).get('hizmet') || '');
       if (secili) { var o = f.querySelector('option[data-slug="' + secili.replace(/[^a-z]/g, '') + '"]'); if (o) o.selected = true; }
+      ipucuGuncelle();
+      E.hizmet.addEventListener('change', ipucuGuncelle);
       function alan(el) { return el.closest('.alan') || el.closest('.onay'); }
       function isaretle(el, hatali) {
         alan(el).classList.toggle('hata', hatali);
@@ -97,50 +120,82 @@
         return d;
       }
       function kontrol() {
-        var ilk = null;
-        function k(el, ok) { isaretle(el, !ok); if (!ok && !ilk) ilk = el; }
+        var hatalar = [];
+        function k(el, ok) { isaretle(el, !ok); if (!ok) hatalar.push(el); }
         var ad = E.ad.value.trim();
-        k(E.ad, ad.length >= 3 && /\s/.test(ad));
+        k(E.ad, ad.length >= 3 && /\S\s+\S/.test(ad));
         var t = telTemiz(E.tel.value); k(E.tel, t.length === 10 && /^[2-5]/.test(t));
         var ep = E.eposta.value.trim(); k(E.eposta, !ep || /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(ep));
         k(E.hizmet, !!E.hizmet.value);
         k(E.aciklama, E.aciklama.value.trim().length >= 10);
         k(E.kvkk, E.kvkk.checked);
-        return ilk;
+        return hatalar;
       }
       ['ad', 'tel', 'eposta', 'hizmet', 'aciklama', 'kvkk'].forEach(function (n) {
         var el = E[n];
         el.addEventListener(el.tagName === 'SELECT' || el.type === 'checkbox' ? 'change' : 'input', function () {
-          if (alan(el).classList.contains('hata')) kontrol();
+          if (alan(el).classList.contains('hata')) {
+            var h = kontrol();
+            if (!h.length) hataOzet.hidden = true;
+          }
         });
       });
+      function goster(el, acik) { el.hidden = !acik; }
       f.addEventListener('submit', function (e) {
         e.preventDefault();
-        var ilk = kontrol();
-        if (ilk) { ilk.focus(); return; }
+        var hatalar = kontrol();
+        if (hatalar.length) {
+          hataOzet.textContent = hatalar.length === 1
+            ? 'Bir alanı kontrol edin: ' + ADLAR[hatalar[0].name] + '.'
+            : hatalar.length + ' alanı kontrol edin: ' + hatalar.map(function (x) { return ADLAR[x.name]; }).join(', ') + '.';
+          hataOzet.hidden = false;
+          hatalar[0].focus();
+          return;
+        }
+        hataOzet.hidden = true;
         var t = telTemiz(E.tel.value), s = [];
         function ekle(etiket, el) { var v = el && el.value.trim(); if (v) s.push(etiket + ': ' + v); }
-        ekle('Firma', E.firma); ekle('Yetkili', E.ad); ekle('Görev / departman', E.gorev);
+        ekle('Ad soyad', E.ad);
         s.push('Telefon: 0' + t.slice(0, 3) + ' ' + t.slice(3, 6) + ' ' + t.slice(6, 8) + ' ' + t.slice(8));
-        ekle('E-posta', E.eposta); ekle('Tesis konumu', E.konum);
+        ekle('E-posta', E.eposta); ekle('Firma', E.firma); ekle('Görev / departman', E.gorev); ekle('Tesis konumu', E.konum);
         s.push('');
-        ekle('Hizmet', E.hizmet); ekle('Talep türü', E.tur); ekle('Alan / tavan yüksekliği', E.olcu); ekle('Planlanan zaman', E.zaman);
-        s.push('', 'Açıklama:', E.aciklama.value.trim());
-        var metin = s.join('\n');
+        ekle('Hizmet', E.hizmet); ekle('Talep türü', E.tur);
+        ekle(lOlcu.firstChild.textContent.trim(), E.olcu); ekle('Planlanan zaman', E.zaman);
+        s.push('', 'İhtiyaç:', E.aciklama.value.trim().slice(0, 1500));  // maxlength'e ek güvence
+        metin = s.join('\n');
         ozet.textContent = metin;
         $('.wa-gonder', basari).href = 'https://wa.me/' + f.getAttribute('data-wa') + '?text=' + encodeURIComponent('Merhaba, web sitesi üzerinden teklif talebi:\n\n' + metin);
-        $('.posta-gonder', basari).href = 'mailto:' + f.getAttribute('data-posta') + '?subject=' + encodeURIComponent('Teklif talebi: ' + E.hizmet.value + (E.firma.value.trim() ? ' — ' + E.firma.value.trim() : '')) + '&body=' + encodeURIComponent(metin);
-        f.hidden = true;
-        $$('.form-giris', kutu).forEach(function (x) { x.hidden = true; });
+        $('.posta-gonder', basari).href = 'mailto:' + f.getAttribute('data-posta') + '?subject=' + encodeURIComponent('Teklif talebi: ' + E.hizmet.value + (E.firma.value.trim() ? ' — ' + E.firma.value.trim() : '')) + '&body=' + encodeURIComponent(metin.replace(/\n/g, '\r\n'));
+        durum.textContent = '';
+        goster(f, false);
+        $$('.form-giris', kutu).forEach(function (x) { goster(x, false); });
         basari.classList.add('acik');
-        basari.focus({ preventScroll: true });
         kutu.scrollIntoView({ block: 'start', behavior: azHareket() ? 'auto' : 'smooth' });
+        basari.focus({ preventScroll: true });
       });
-      $('.yeni-talep', basari).addEventListener('click', function () {
-        f.reset(); f.hidden = false; basari.classList.remove('acik');
-        $$('.form-giris', kutu).forEach(function (x) { x.hidden = false; });
-        $$('.hata', f).forEach(function (x) { x.classList.remove('hata'); });
-        E.firma.focus();
+      function formaDon(sifirla) {
+        if (sifirla) { f.reset(); ipucuGuncelle(); $$('.hata', f).forEach(function (x) { x.classList.remove('hata'); }); $$('[aria-invalid]', f).forEach(function (x) { x.removeAttribute('aria-invalid'); }); }
+        goster(f, true); basari.classList.remove('acik');
+        $$('.form-giris', kutu).forEach(function (x) { goster(x, true); });
+        E.ad.focus();
+      }
+      $('.yeni-talep', basari).addEventListener('click', function () { formaDon(true); });
+      $('.duzenle', basari).addEventListener('click', function () { formaDon(false); });
+      $('.kopyala', basari).addEventListener('click', function () {
+        function basarili() { durum.textContent = 'Metin kopyalandı. WhatsApp veya e-postaya yapıştırabilirsiniz.'; }
+        function elle() {
+          // eski yöntem; o da olmazsa metni seçili bırak, kullanıcı elle kopyalasın
+          var ok = false;
+          try {
+            var r = document.createRange(); r.selectNodeContents(ozet);
+            var sec = getSelection(); sec.removeAllRanges(); sec.addRange(r);
+            ok = document.execCommand && document.execCommand('copy');
+          } catch (h) { ok = false; }
+          if (ok) basarili();
+          else durum.textContent = 'Otomatik kopyalanamadı. Metin seçildi; Ctrl+C ile veya basılı tutarak kopyalayın.';
+        }
+        if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(metin).then(basarili, elle);
+        else elle();
       });
     });
   });
