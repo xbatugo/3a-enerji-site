@@ -617,8 +617,8 @@ h1,h2,h3,h4{color:var(--baslik)}
 
 /* alt bilgi: solda telif, sağda tasarımcı logosu; mobilde alt alta ortalı */
 .ab-alt{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px 24px}
-.ab-tasarim{height:72px;width:auto;max-width:none}
+.ab-tasarim{height:56px;width:auto;max-width:none}
 @media(max-width:640px){
   .ab-alt{flex-direction:column;justify-content:center;text-align:center;gap:10px}
-  .ab-tasarim{height:64px}
+  .ab-tasarim{height:48px}
 }
