@@ -78,7 +78,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 .ust-wa-ikon{display:none}
 .cekmece{display:none}
 @media(max-width:1320px){.ust-tel{display:none}}
-@media(max-width:1120px){.menu a{padding:10px 8px}.marka small{display:none}}
+@media(max-width:1120px){.menu a{padding:10px 8px}}
 @media(max-width:1023px){
   .menu,.ust-eylem{display:none}
   .menu-dg{display:inline-flex}
@@ -90,7 +90,7 @@ button,input,select,textarea{font:inherit;color:inherit}
   .cekmece>a[aria-current=page]{color:var(--mavi)}
   .cekmece .c-dg{display:grid;gap:10px;margin-top:24px}
 }
-@media(max-width:420px){.marka small{display:none}}
+
 
 /* hero */
 .kahraman{position:relative;background:var(--lacivert);color:#fff;overflow:hidden}
@@ -613,3 +613,4 @@ h1,h2,h3,h4{color:var(--baslik)}
 }
 @media(max-width:420px){.kh-dg .dg{width:100%}}
 @media(min-width:701px) and (max-width:1100px){.kahraman::after{background:linear-gradient(90deg,rgba(10,27,44,.95) 0%,rgba(10,27,44,.9) 55%,rgba(10,27,44,.5) 85%,rgba(10,27,44,.25) 100%)}}
+
