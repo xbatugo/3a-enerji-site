@@ -588,7 +588,7 @@ h1,h2,h3,h4{color:var(--baslik)}
 .maddeler li{background:none;border:0;padding:0 0 0 14px;position:relative;font-size:.9375rem;color:var(--metin);border-radius:0}
 .maddeler li::before{content:"";position:absolute;left:0;top:.6em;width:6px;height:6px;border-radius:50%;background:var(--vurgu)}
 .alan-kart figure{aspect-ratio:3/2}
-.alan-kartlar{grid-template-columns:1fr 1fr}
+@media(min-width:901px){.alan-kartlar{grid-template-columns:1fr 1fr}}
 
 /* P6 dokunma alanları (≥44 px) */
 .filtre button{min-height:44px}
@@ -607,13 +607,9 @@ h1,h2,h3,h4{color:var(--baslik)}
 .kahraman picture img{object-position:18% center}
 .kahraman::after{background:linear-gradient(90deg,rgba(10,27,44,.94) 0%,rgba(10,27,44,.84) 34%,rgba(10,27,44,.35) 64%,rgba(10,27,44,.08) 100%)}
 @media(max-width:700px){
-  /* mobil: metin koyu zeminde, fotoğraf altında kırpılmadan (4:3) ve üstten zemine kaynaşarak */
-  .kahraman{display:flex;flex-direction:column}
-  .kahraman::after{content:none}
-  .kahraman .kap{order:-1;padding-block:40px 28px}
-  .kahraman picture{position:relative;inset:auto;display:block;height:auto}
-  .kahraman picture img{position:static;height:auto;aspect-ratio:4/3;object-position:center}
-  .kahraman picture::after{content:"";position:absolute;inset:0 0 auto;height:38%;background:linear-gradient(180deg,var(--derin),rgba(10,27,44,0))}
+  /* mobil: fotoğraf yazının arkasında; ayrı dikey kırpım, ekipman ortada sabit */
+  .kahraman picture img{object-position:center 60%}
+  .kahraman::after{background:linear-gradient(180deg,rgba(10,27,44,.86) 0%,rgba(10,27,44,.74) 40%,rgba(10,27,44,.72) 75%,rgba(10,27,44,.86) 100%)}
 }
 @media(max-width:420px){.kh-dg .dg{width:100%}}
 @media(min-width:701px) and (max-width:1100px){.kahraman::after{background:linear-gradient(90deg,rgba(10,27,44,.95) 0%,rgba(10,27,44,.9) 55%,rgba(10,27,44,.5) 85%,rgba(10,27,44,.25) 100%)}}
