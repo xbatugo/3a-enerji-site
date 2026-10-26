@@ -374,7 +374,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 @media(max-width:640px){.wa-sabit{width:56px;padding:0;justify-content:center;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px))}.wa-sabit span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}}
 
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}}
-@media print{.ust,.wa-sabit,.cekmece,.alt-bilgi,.kat-nav{display:none}}
+@media print{.ust,.wa-sabit,.alt-cubuk,.cekmece,.alt-bilgi,.kat-nav{display:none}body{padding-bottom:0}}
 
 /* yardımcılar (satır içi stil yok: CSP) */
 .bosluk-ust{margin-top:26px}
@@ -559,3 +559,22 @@ h1,h2,h3,h4{color:var(--baslik)}
 @media(max-width:420px){.kh-dg .dg{width:100%}}
 @media(max-width:480px){.kh-bilgi span:last-child{flex-basis:100%}.kh-bilgi span:last-child::before{content:none}}
 @media(min-width:601px) and (max-width:900px){.kh-gorsel img{aspect-ratio:21/9}}
+
+/* P3 sabit iletişim: tek kontrol. <1024 px alt çubuk (Ara / WhatsApp / Teklif), 1024–1359 px yok (yapışkan üst menüde var),
+   ≥1360 px içerik dışındaki boşlukta yuvarlak WhatsApp düğmesi. Form alanı odaktayken (klavye) çubuk gizlenir. */
+.wa-sabit{width:56px;height:56px;padding:0;justify-content:center;border-radius:50%;display:none}
+.wa-sabit svg{width:28px;height:28px}
+.alt-cubuk{display:none}
+@media(min-width:1360px){.wa-sabit{display:flex}}
+@media(max-width:1023px){
+  html{scroll-padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))}
+  body{padding-bottom:calc(60px + env(safe-area-inset-bottom,0px))}
+  .alt-cubuk{position:fixed;left:0;right:0;bottom:0;z-index:60;display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:1px;
+    background:var(--cizgi);border-top:1px solid var(--cizgi);padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -6px 20px rgba(0,0,0,.25)}
+  .alt-cubuk a{display:flex;align-items:center;justify-content:center;gap:8px;min-height:60px;background:var(--derin);color:#fff;font-weight:600;font-size:.9375rem;text-decoration:none}
+  .alt-cubuk a.ac-wa{background:var(--wa)}
+  .alt-cubuk a.ac-teklif{background:var(--mavi)}
+  .alt-cubuk svg{width:20px;height:20px;flex:none}
+  .klavye .alt-cubuk,.menu-acik .alt-cubuk{display:none}
+  .klavye body{padding-bottom:0}
+}

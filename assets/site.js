@@ -14,6 +14,7 @@
     if (!dg || !c) return;
     function ayarla(acik) {
       c.classList.toggle('acik', acik);
+      document.documentElement.classList.toggle('menu-acik', acik);
       dg.setAttribute('aria-expanded', acik ? 'true' : 'false');
       dg.setAttribute('aria-label', acik ? 'Menüyü kapat' : 'Menüyü aç');
       dg.innerHTML = acik ? IKON_KAPAT : IKON_MENU;
@@ -141,6 +142,15 @@
         $$('.hata', f).forEach(function (x) { x.classList.remove('hata'); });
         E.firma.focus();
       });
+    });
+  });
+
+  dene('klavye', function () {
+    // mobilde form alanı odaktayken sabit alt çubuk gizlenir; ekran klavyesi odaklı alanı örtmez
+    var alanMi = function (el) { return el && /^(INPUT|SELECT|TEXTAREA)$/.test(el.tagName) && el.type !== 'checkbox'; };
+    document.addEventListener('focusin', function (e) { if (alanMi(e.target)) document.documentElement.classList.add('klavye'); });
+    document.addEventListener('focusout', function () {
+      setTimeout(function () { if (!alanMi(document.activeElement)) document.documentElement.classList.remove('klavye'); }, 50);
     });
   });
 
