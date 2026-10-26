@@ -5,6 +5,7 @@
   var $ = function (s, k) { return (k || document).querySelector(s); };
   var $$ = function (s, k) { return Array.prototype.slice.call((k || document).querySelectorAll(s)); };
   function dene(ad, fn) { try { fn(); } catch (h) { if (window.console) console.warn('[' + ad + ']', h); } }
+  function azHareket() { return window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches; }
   var IKON_MENU = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';
   var IKON_KAPAT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>';
 
@@ -132,7 +133,7 @@
         $$('.form-giris', kutu).forEach(function (x) { x.hidden = true; });
         basari.classList.add('acik');
         basari.focus({ preventScroll: true });
-        kutu.scrollIntoView({ block: 'start', behavior: 'smooth' });
+        kutu.scrollIntoView({ block: 'start', behavior: azHareket() ? 'auto' : 'smooth' });
       });
       $('.yeni-talep', basari).addEventListener('click', function () {
         f.reset(); f.hidden = false; basari.classList.remove('acik');

@@ -527,3 +527,15 @@ h1,h2,h3,h4{color:var(--baslik)}
 .alan-kartlar>:last-child .alan-hiz{grid-template-columns:1fr 1fr;gap:6px}
 @media(max-width:900px){.alan-kartlar{grid-template-columns:1fr}}
 @media(max-width:520px){.alan-kartlar>:last-child .alan-hiz{grid-template-columns:1fr}}
+
+/* P1 teklif: hedef doğrudan form (#teklif). Mobil sıra = DOM sırası (başlık → form → iletişim); masaüstünde form sağ sütunda */
+.teklif{grid-template-areas:"bas form" "bilgi form";grid-template-rows:auto 1fr;row-gap:0}
+.teklif-bas{grid-area:bas}
+.teklif>.form-kutu{grid-area:form}
+.teklif-bilgi{grid-area:bilgi}
+.teklif>.form-kutu:first-child{grid-row:1/-1}
+.teklif>.form-kutu:first-child+.teklif-bilgi{grid-area:bas;grid-row:1/-1}
+@media(max-width:900px){
+  .teklif{grid-template-areas:"bas" "form" "bilgi";grid-template-rows:auto;row-gap:32px}
+  .teklif>.form-kutu:first-child,.teklif>.form-kutu:first-child+.teklif-bilgi{grid-area:auto;grid-row:auto}
+}
