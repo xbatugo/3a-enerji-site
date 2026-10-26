@@ -614,3 +614,13 @@ h1,h2,h3,h4{color:var(--baslik)}
 @media(max-width:420px){.kh-dg .dg{width:100%}}
 @media(min-width:701px) and (max-width:1100px){.kahraman::after{background:linear-gradient(90deg,rgba(10,27,44,.95) 0%,rgba(10,27,44,.9) 55%,rgba(10,27,44,.5) 85%,rgba(10,27,44,.25) 100%)}}
 
+
+/* alt bilgi: tasarımcı logosu iki yazının tam ortasında */
+.ab-alt{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px 24px}
+.ab-alt>span:last-child{text-align:right}
+.ab-tasarim{height:60px;width:auto;max-width:none}
+@media(max-width:640px){
+  .ab-alt{grid-template-columns:1fr;justify-items:center;text-align:center;gap:10px}
+  .ab-alt>span:last-child{text-align:center}
+  .ab-tasarim{height:56px}
+}
