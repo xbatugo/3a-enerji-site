@@ -1,0 +1,7 @@
+/* JavaScript kapalıyken: mobil menü düğmesi çalışmaz; menü bağlantıları üst menünün altında düz liste olarak görünür */
+.menu-dg{display:none!important}
+@media(max-width:1023px){
+  .cekmece{display:block;position:static;visibility:visible;opacity:1;padding:4px 20px 16px;background:var(--derin);border-bottom:1px solid var(--cizgi)}
+  .cekmece>a{display:inline-block;padding:10px 12px 10px 0;border:0;font-size:1rem}
+  .cekmece .c-dg{display:none}
+}

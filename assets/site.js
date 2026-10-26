@@ -5,6 +5,13 @@
   var $ = function (s, k) { return (k || document).querySelector(s); };
   var $$ = function (s, k) { return Array.prototype.slice.call((k || document).querySelectorAll(s)); };
   function dene(ad, fn) { try { fn(); } catch (h) { if (window.console) console.warn('[' + ad + ']', h); } }
+  function arkaPlan(kapali, haric) {
+    // açık menü / büyüteç dışındaki her şey klavye ve ekran okuyucu için devre dışı
+    $$('body > *').forEach(function (el) {
+      if (el === haric || el.tagName === 'SCRIPT' || el.contains(haric)) return;
+      if (kapali) el.setAttribute('inert', ''); else el.removeAttribute('inert');
+    });
+  }
   function azHareket() { return window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches; }
   var IKON_MENU = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';
   var IKON_KAPAT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>';
@@ -19,6 +26,13 @@
       dg.setAttribute('aria-label', acik ? 'Menüyü kapat' : 'Menüyü aç');
       dg.innerHTML = acik ? IKON_KAPAT : IKON_MENU;
       document.documentElement.style.overflow = acik ? 'hidden' : '';
+      // çekmece açıkken yalnız üst menü (kapat düğmesi) ve çekmece etkileşimli kalır
+      $$('body > *').forEach(function (el) {
+        if (el === c || el.classList.contains('ust') || el.tagName === 'SCRIPT') return;
+        if (acik) el.setAttribute('inert', ''); else el.removeAttribute('inert');
+      });
+      $$('.ust .kap > *').forEach(function (el) { if (el !== dg) { if (acik) el.setAttribute('inert', ''); else el.removeAttribute('inert'); } });
+      if (acik) { var ilk = $('a', c); if (ilk) ilk.focus(); }
     }
     dg.addEventListener('click', function () { ayarla(!c.classList.contains('acik')); });
     $$('a', c).forEach(function (a) { a.addEventListener('click', function () { ayarla(false); }); });
@@ -52,11 +66,11 @@
     function ac(p) {
       liste = $$('.proje').filter(function (x) { return !x.closest('[hidden]'); });
       i = Math.max(0, liste.indexOf(p)); son = p; goster();
-      b.classList.add('acik'); b.setAttribute('aria-hidden', 'false');
+      b.classList.add('acik'); b.setAttribute('aria-hidden', 'false'); arkaPlan(true, b);
       $('.by-kapat', b).focus({ preventScroll: true });
     }
     function kapat() {
-      b.classList.remove('acik'); b.setAttribute('aria-hidden', 'true');
+      b.classList.remove('acik'); b.setAttribute('aria-hidden', 'true'); arkaPlan(false, b);
       if (son) son.focus({ preventScroll: true });
     }
     function git(n) { i = (i + n + liste.length) % liste.length; goster(); }

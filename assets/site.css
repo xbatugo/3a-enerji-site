@@ -608,3 +608,15 @@ h1,h2,h3,h4{color:var(--baslik)}
 .maddeler li::before{content:"";position:absolute;left:0;top:.6em;width:6px;height:6px;border-radius:50%;background:var(--vurgu)}
 .alan-kart figure{aspect-ratio:3/2}
 .alan-kartlar{grid-template-columns:1fr 1fr}
+
+/* P6 dokunma alanları (≥44 px) */
+.filtre button{min-height:44px}
+.kat-nav a{min-height:44px;display:flex;align-items:center}
+.iz a{display:inline-block;padding-block:10px;margin-block:-10px}
+.yan-kutu li a{min-height:44px;display:flex;align-items:center}
+.alt-bilgi ul a{display:inline-block;padding-block:6px}
+.form-kutu .form-baslik{font-size:1.375rem;color:#fff}
+.mini-harita small{background:#F2F5F8;color:#263746}
+/* açılırken görünürlük anında gelir (odak hemen taşınabilsin), kapanırken solma bitince gizlenir */
+.cekmece,.buyutec{transition:opacity .15s,visibility 0s linear .15s}
+.cekmece.acik,.buyutec.acik{transition:opacity .15s,visibility 0s}
