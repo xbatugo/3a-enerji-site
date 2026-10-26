@@ -601,3 +601,10 @@ h1,h2,h3,h4{color:var(--baslik)}
 .basari .dg-grup .dg{flex:1 1 auto}
 @media(max-width:560px){.ek-izgara{grid-template-columns:1fr}}
 .basari h3 svg{flex:none}.basari:focus{outline:none}
+
+/* P5 kartlar: dekoratif maddeler düğme gibi görünmez; görsel oranları tutarlı (3:2) */
+.maddeler{gap:4px 16px}
+.maddeler li{background:none;border:0;padding:0 0 0 14px;position:relative;font-size:.9375rem;color:var(--metin);border-radius:0}
+.maddeler li::before{content:"";position:absolute;left:0;top:.6em;width:6px;height:6px;border-radius:50%;background:var(--vurgu)}
+.alan-kart figure{aspect-ratio:3/2}
+.alan-kartlar{grid-template-columns:1fr 1fr}
