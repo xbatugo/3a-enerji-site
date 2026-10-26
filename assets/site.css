@@ -539,3 +539,23 @@ h1,h2,h3,h4{color:var(--baslik)}
   .teklif{grid-template-areas:"bas" "form" "bilgi";grid-template-rows:auto;row-gap:32px}
   .teklif>.form-kutu:first-child,.teklif>.form-kutu:first-child+.teklif-bilgi{grid-area:auto;grid-row:auto}
 }
+
+/* P2 hero: metin + ayrı fotoğraf paneli; mobilde metin → CTA → fotoğraf */
+.kahraman{background:var(--derin)}
+.kahraman::after{content:none}
+.kahraman .kap.kh-izgara{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(32px,5vw,72px);align-items:center;padding-block:clamp(48px,7vw,96px)}
+.kahraman h1{font-size:clamp(1.875rem,3.6vw,3rem);max-width:640px;overflow-wrap:break-word;hyphens:manual}
+.kahraman .giris{margin-top:18px;max-width:560px}
+.kh-bilgi{display:flex;flex-wrap:wrap;gap:4px 0;margin-bottom:18px;font-size:.875rem;font-weight:500;color:#8FB8DD}
+.kh-bilgi span+span::before{content:"·";margin:0 10px;color:#5F87AD}
+.kh-gorsel{margin:0;position:relative}
+.kh-gorsel img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--r);border:1px solid var(--cizgi)}
+@media(max-width:900px){
+  .kahraman .kap.kh-izgara{grid-template-columns:1fr;gap:28px;padding-block:28px 32px}
+  .kh-gorsel img{aspect-ratio:16/9}
+  .kahraman .giris{font-size:1.0625rem;margin-top:14px}
+  .kh-dg{margin-top:22px}
+}
+@media(max-width:420px){.kh-dg .dg{width:100%}}
+@media(max-width:480px){.kh-bilgi span:last-child{flex-basis:100%}.kh-bilgi span:last-child::before{content:none}}
+@media(min-width:601px) and (max-width:900px){.kh-gorsel img{aspect-ratio:21/9}}
