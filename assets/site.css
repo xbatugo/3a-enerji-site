@@ -104,14 +104,14 @@ button,input,select,textarea{font:inherit;color:inherit}
 
 /* odak şeridi */
 .odak{background:#fff;border-bottom:1px solid var(--cizgi)}
-.odak ul{list-style:none;display:grid;grid-template-columns:repeat(4,1fr)}
+.odak ul{list-style:none;display:grid;grid-template-columns:repeat(5,1fr)}
 .odak li+li{border-left:1px solid var(--cizgi)}
-.odak a{display:flex;flex-direction:column;gap:4px;padding:26px 24px;text-decoration:none;color:var(--lacivert);height:100%}
+.odak a{display:flex;flex-direction:column;gap:4px;padding:26px 20px;text-decoration:none;color:var(--lacivert);height:100%}
 .odak a:hover{background:var(--gri)}
 .odak b{font-weight:600;font-size:1.0625rem}
 .odak span{font-size:.9375rem;color:var(--soluk)}
 .odak i{font-style:normal;font-size:.8125rem;font-weight:600;color:var(--mavi);letter-spacing:.08em}
-@media(max-width:900px){.odak ul{grid-template-columns:1fr 1fr}.odak li:nth-child(3){border-left:0}.odak li:nth-child(n+3){border-top:1px solid var(--cizgi)}}
+@media(max-width:1100px){.odak ul{grid-template-columns:1fr 1fr}.odak li:nth-child(odd){border-left:0}.odak li:nth-child(n+3){border-top:1px solid var(--cizgi)}.odak li:last-child{grid-column:1/-1}}
 @media(max-width:520px){.odak ul{grid-template-columns:1fr}.odak li+li{border-left:0;border-top:1px solid var(--cizgi)}.odak a{padding:18px 4px}}
 
 /* çözüm kartları */
